@@ -1,9 +1,9 @@
 locals {
   module_name    = "collector-pubsub-ce"
-  module_version = "0.2.1"
+  module_version = "0.2.2"
 
   app_name    = "stream-collector"
-  app_version = "2.3.1"
+  app_version = "2.4.0"
 
   local_labels = {
     name           = var.name
@@ -130,6 +130,12 @@ locals {
     byte_limit    = var.byte_limit
     record_limit  = var.record_limit
     time_limit_ms = var.time_limit_ms
+
+    disable = !tobool(var.telemetry_enabled)
+    user_provided_id = var.user_provided_id
+    auto_generated_id = module.telemetry.0.auto_generated_id
+    module_name = local.module_name
+    module_version = local.module_version
   })
 
   startup_script = templatefile("${path.module}/templates/startup-script.sh.tmpl", {
